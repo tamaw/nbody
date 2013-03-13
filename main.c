@@ -1,27 +1,11 @@
 #ifndef MAIN_TW_H
 #define MAIN_TW_H
-//#include "nbody.h"
+#include "nbody.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include "gmp.h"
-
-/*
-void something() {
-    //const long double GRAVITATIONAL_CONSTANT = 0.000000000066726;
-    const long double G_CONST = 6.6726 * 10e-11;
-    long double mass = 5.98 * 10e24; //kg
-    long double radius = 6378100; // meters
-    long double force = G_CONST * mass / pow(radius, 2);
-    long long test = pow(6378100, 2);
-
-    printf("G const: %Le\n", G_CONST);
-    printf("mass: %Le\n", mass);
-    printf("radius: %Le\n", radius);
-    printf("force: %Le\n", force);
-
-}
-*/
+#include "SDL.h"
 
 // for real plantary data the numbers are too big!
 void something() {
@@ -71,26 +55,35 @@ int main(int argc, char *argv[])
 {
     //struct universe *myuniverse;
     //
+    mpf_set_default_prec(100);
+
     something();
     puts("--------");
     something2();
 
-    mpf_set_default_prec(100);
+    // start SDL
 
-    /*
+    if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
 
-    mpf_t afp;
-    mp_exp_t exp;
+    SDL_Surface *screen;
 
-    mpf_init(afp);
-    if(mpf_set_str(afp, "6.6726e-11", 10) < 0)
-        puts("error\n");
+    screen = SDL_SetVideoMode(SCREEN_RES_X, SCREEN_RES_Y,
+            16, SDL_SWSURFACE);
+    if(screen == NULL) {
+        fprintf(stderr, "Unable to set video: %s\n", SDL_GetError());
+        exit(EXIT_FAILURE);
+    }
 
-    //printf("G: %s\n", mpf_get_str(NULL, &exp, 10, 0, afp));
-    gmp_printf("G: %.Fe\n", afp);
+    atexit(SDL_Quit);
+    // sdl init done
 
-    mpf_clear(afp);
-    */
+    DrawPixel(screen, 255, 0 0);
+
+    // wait
+    getchar();
 
     return EXIT_SUCCESS;
 }

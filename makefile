@@ -4,16 +4,14 @@
 
 PROJECT	= nbody
 CC		= gcc
-FLAGS	= -std=c99 -Wall -Iinclude
-LDFLAGS	= -L/home/s2626286/assignment1/lib
-DEPS	= -lgmp
-
- #gcc -std=c99 -Wall -L/home/s2626286/assignment1/lib -o main main.c -lgmp && ./main
+FLAGS	= -std=c99 -Wall -Iinclude -Iinclude/SDL -D_GNU_SOURCE=1 -D_REENTRANT
+LDFLAGS	= -Llib -L./lib/SDL -Wl,-rpath,/tmp/gcc/lib -lSDL -lpthread -lm -ldl -lpthread
+DEPS	= -lgmp -lSDL
 
 all: build
 
 build: main.o universe.o body.o
-	$(CC) main.o universe.o body.o $(LDFLAGS) $(DEPS) -o $(PROJECT)
+	$(CC) main.o universe.o body.o $(LDFLAGS) $(DEPS) -o bin/$(PROJECT)
 
 main.o: universe.o body.o
 	$(CC) -c $(FLAGS) main.c
@@ -25,6 +23,6 @@ body.o:
 	$(CC) -c $(FLAGS) body.c
 
 clean:
-	rm *.o $(PROJECT)
+	rm *.o bin/$(PROJECT)
 
 
