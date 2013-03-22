@@ -12,29 +12,32 @@
 
 void init_body(struct body *mybody) 
 {
-    // todo int rc = response return init fail
-    mpf_init(mybody->mass); // kgs
-    mpf_init(mybody->radius); // m2
-    mpf_init(mybody->force);
-    mpf_init(mybody->velocityX);
-    mpf_init(mybody->velocityY);
+    mpf_inits(mybody->mass, mybody->radius, mybody->force,
+            mybody->velocityX, mybody->velocityY, NULL);
 }
 
 void destroy_body(struct body *mybody) 
 {
-    mpf_clear(mybody->mass);
-    mpf_clear(mybody->radius);
-    mpf_clear(mybody->force);
-    mpf_clear(mybody->velocityX);
-    mpf_clear(mybody->velocityY);
+    mpf_clears(mybody->mass, mybody->radius, mybody->force,
+            mybody->velocityX, mybody->velocityY, NULL);
 }
+
+
 
 /*
  * Create a random body
  */
-void populate_random(struct body *mybody)
+void populate_random_body(struct body *mybody)
 {
 }
+
+double calc_body_distance(struct body *body1, struct body *body2) 
+{
+    double distance; // todo make gmp?
+
+    distance = sqrt(
+}
+
 
 // calculates the force on the body
 // force = G*mass / (radius * radius)
@@ -42,10 +45,46 @@ void populate_random(struct body *mybody)
 void calc_body_force(struct body *mybody) 
 {
     // force = g_const * mass / pow(radius, 2)
-    mpf_pow_ui(mybody->radius, mybody->radius, 2); // radius squared
-    mpf_mul(mybody->force, myuniverse.g_const, mybody->mass);
-    mpf_div(mybody->force, mybody->force, mybody->radius);
+    mpf_t totalmass, tempforce, tempradius;
+    mpf_inits(totalmass, tempforce, tempradius, NULL);
+
+    // force = 0
+    mpf_set_si(mybody->force, 0L);
+
+    for(int i = 0; i < myuniverse.num_of_bodies; i++) {
+        struct body *otherbody = myuniverse.bodies[i];
+        // todo calc distance between bodies
+
+        /// m1 * m2
+        mpf_mul(totalmass, mybody->mass, otherbody->mass);
+        // r * r !!! radius is distance between two bodies!
+        mpf_pow_ui(tempradius, mybody->radius, 2); 
+        // G * (m1 * m2)
+        mpf_mul(tempforce, myuniverse.g_const, totalmass);
+        // (G * (m1 * m2)) / (r * r)
+        mpf_div(tempforce, mybody->force, mybody->radius);
+
+        // sum force
+        mpf_add(mybody->force, mybody->force, tempforce);
+    }
+
+    mpf_clears(totalmass, tempforce, tempradius, NULL);
 }
+
+void calc_body_velocity(struct body *mybody) 
+{
+    // new v = v + (force * time) / mass
+}
+
+void calc_body_pos(struct body *mybody) 
+{
+}
+
+
+// force * timesquared / mass = distance
+//void calc_body_distance
+
+// move forward
 
 void print_body(struct body *mybody) 
 {

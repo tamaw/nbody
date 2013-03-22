@@ -11,11 +11,10 @@ int init_universe(long num_of_bodies)
 {
     mpf_init(myuniverse.g_const);
     mpf_set_str(myuniverse.g_const, "6.6742e-11", 10); 
-    //myuniverse.time ???
+    myuniverse.time = TIME;
 
     myuniverse.num_of_bodies = num_of_bodies;
-    myuniverse.bodies = (struct body*)malloc(
-            sizeof(struct body) * num_of_bodies);
+    //myuniverse.bodies
 
     /*
     for(int i = 0; i < num_of_bodies) {
@@ -27,22 +26,33 @@ int init_universe(long num_of_bodies)
     return 0;
 }
 
+void destroy_universe() {
+    mpf_clear(myuniverse.g_const);
+}
 
-/*
-void UpdateUniverse(struct universe *myuniverse) 
-{
+void run_universe() { // for one tick? step universe or somethign?
 
-};
-*/
-
-/*
-Universe make_universe(Body* bodies, int num_bodies)
-{
-    // asser bodies not null
+    /*
+    for(int i = 0; i < myuniverse.time; i++) {
+        for(int j = 0; j < myuniverse.num_of_bodies; j++) {
+            calc_body_force(myunvierse.bodies[j]);
+            calc_body_velocity(myuniverse.bodies[j]);
+            calc_body_pos(myuniverse.bodies[j]);
+        }
+    }
+    */
+    
+// for 0 to time
+//  foreach body
+//      compute force
+//      compute velocity
+//      compute new position
+//
+//  foreach body
+//      update position
 
 
 }
-*/
 
 #endif /* UNIVERSE_TW */
 
