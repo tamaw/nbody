@@ -7,13 +7,13 @@ struct universe myuniverse;
 /*
  * Creates a global universe including any constants with gmp
  */
-int init_universe(long num_of_bodies) 
-{
+    /*
     mpf_init(myuniverse.g_const);
     mpf_set_str(myuniverse.g_const, "6.6742e-11", 10); 
     myuniverse.time = TIME;
-
     myuniverse.num_of_bodies = num_of_bodies;
+    */
+
     //myuniverse.bodies
 
     /*
@@ -23,14 +23,7 @@ int init_universe(long num_of_bodies)
     }
     */
     
-    return 0;
-}
-
-void destroy_universe() {
-    mpf_clear(myuniverse.g_const);
-}
-
-void run_universe() { // for one tick? step universe or somethign?
+//void run_universe() { // for one tick? step universe or somethign?
 
     /*
     for(int i = 0; i < myuniverse.time; i++) {
@@ -52,7 +45,7 @@ void run_universe() { // for one tick? step universe or somethign?
 //      update position
 
 
-}
+//}
 
 #endif /* UNIVERSE_TW */
 

@@ -1,28 +1,6 @@
 #ifndef BODY_TW
 #define BODY_TW
 #include "nbody.h"
-#include "gmp.h"
-
-/*
-    const long double G_CONST = 6.6726 * 10e-11;
-    long double mass = 7.36 * 10e22; //kg
-    long double radius = 1735771; // meters
-    long double force = G_CONST * mass / pow(radius, 2);
-    */
-
-void init_body(struct body *mybody) 
-{
-    mpf_inits(mybody->mass, mybody->radius, mybody->force,
-            mybody->velocityX, mybody->velocityY, NULL);
-}
-
-void destroy_body(struct body *mybody) 
-{
-    mpf_clears(mybody->mass, mybody->radius, mybody->force,
-            mybody->velocityX, mybody->velocityY, NULL);
-}
-
-
 
 /*
  * Create a random body
@@ -31,20 +9,42 @@ void populate_random_body(struct body *mybody)
 {
 }
 
-double calc_body_distance(struct body *body1, struct body *body2) 
+double body_distance(struct body *body1, struct body *body2) 
 {
-    double distance; // todo make gmp?
+    return  sqrt(
+            pow(body2->posX - body1->posX, 2.0) +
+            pow(body2->posY - body1->posY, 2.0)
+            );
+    // todo subtrace radius or each??
+}
 
-    distance = sqrt(
+// todo dont return instead sum members of body struct
+void body_force(struct body *body1, struct body *body2) 
+{
+    // G * (m1 * m2)
+    double totalmass = myuniverse.g_const * (body1->mass * body2->mass);
+    double radius = body_distance(body1, body2);
+    double theforce =  totalmass / (radius * radius);
+
+    // what angle is the force
+    double deltaY = body1->posY - body2->posY;
+    double deltaX = body1->posX - body2->posX;
+    // below Y axis is reveresed as Y goes down the page
+    double angle = atan2(deltaX, deltaY) * 180 / M_PI;
+
+    printf("angle: %f\n", angle);
+
+    // given angle, calculate force for X and Y 
+    body1->forceX += theforce * cos(angle);
+    body1->forceY += theforce * sin(angle);
 }
 
 
 // calculates the force on the body
 // force = G*mass / (radius * radius)
 // force = G*m1*m2/rsqaured
-void calc_body_force(struct body *mybody) 
-{
     // force = g_const * mass / pow(radius, 2)
+ /*
     mpf_t totalmass, tempforce, tempradius;
     mpf_inits(totalmass, tempforce, tempradius, NULL);
 
@@ -69,30 +69,29 @@ void calc_body_force(struct body *mybody)
     }
 
     mpf_clears(totalmass, tempforce, tempradius, NULL);
-}
+    */
 
-void calc_body_velocity(struct body *mybody) 
+void body_velocity(struct body *body1, struct body *body2) 
 {
     // new v = v + (force * time) / mass
 }
-
-void calc_body_pos(struct body *mybody) 
-{
-}
-
 
 // force * timesquared / mass = distance
 //void calc_body_distance
 
 // move forward
 
-void print_body(struct body *mybody) 
+void body_print(struct body *mybody) 
 {
-    printf("%s:\n", mybody->name);
-    gmp_printf("G: %.Fe\n", myuniverse.g_const);
-    gmp_printf("M: %.Fe\n", mybody->mass);
-    gmp_printf("R: %.Fe\n", mybody->radius);
-    gmp_printf("F: %.Fe\n", mybody->force);
+    // todo add posx posy?
+    printf("%s----\nM: %f\nR: %fPX: %f PY: %f FX: %f FY: %f\n",
+            mybody->name,
+            mybody->mass,
+            mybody->radius,
+            mybody->posX,
+            mybody->posY,
+            mybody->forceX,
+            mybody->forceY);
 }
 
 #endif /* BODY_TW */
