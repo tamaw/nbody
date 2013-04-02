@@ -3,24 +3,17 @@
 
 #define SCREEN_RES_X 800
 #define SCREEN_RES_Y 800
-#define TICK_INTERVAL 300
-#define TIME 100
+#define TICK_INTERVAL 5
+#define TIME_MAX 200
 #define GRAVITATIONAL_CONST 6.6742
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 #include <math.h>
 #include "SDL.h"
 #include "gmp.h"
-
-// the global universe 
-struct universe {
-    double g_const; // gravitiational constant
-    int num_of_bodies;
-    long time;
-    struct body *bodies[3];
-};
 
 // body 
 struct body {
@@ -37,25 +30,25 @@ struct body {
 
 
 // todo introduce me to body
-/*
-typedef struct Point {
-    double posX;
-    double posY;
+struct point {
+    double x, y;
 };
-*/
+typedef struct point Point;
 
-void body_force(struct body *body1, struct body *body2);
-double body_distance(struct body *body1, struct body *body2);
-void body_velocity(struct body *body1, struct body *body2);
+// body function prototypes
+struct body* make_rand_body();
+void body_compute_force(struct body *bodya, struct body *bodyb);
+double body_compute_distance(struct body *body1, struct body *body2);
+void body_compute_velocity(struct body *body1, int time);
+void body_compute_position(struct body *mybody);
 void body_print(struct body *mybody);
-
-// global universe
-extern struct universe myuniverse; // todo typedef me
+void update_bodies(int time, struct body *bodies[], int num_bodies);
+void draw_bodies(SDL_Surface *screen, struct body *bodies[],
+        int num_of_bodies);
 
 // display
-void run_SDL();
-Uint32 timeleft_SDL();
-//void DrawBody(SDL_Surface *screen, struct body *mybody);
+void run(struct body *bodies[], int num_bodies);
+int init_SDL();
 void DrawPixel(SDL_Surface *screen, int x, int y, Uint8 R, Uint8 G, Uint8 B);
 
 #endif /* NBODY_TW_H */

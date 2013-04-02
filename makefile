@@ -10,14 +10,11 @@ DEPS	= -lgmp -lSDL
 
 all: build
 
-build: main.o universe.o body.o display.o
-	$(CC) main.o display.o universe.o body.o $(LDFLAGS) $(DEPS) -o bin/$(PROJECT)
+build: main.o body.o display.o
+	$(CC) main.o display.o body.o $(LDFLAGS) $(DEPS) -o bin/$(PROJECT)
 
-main.o: universe.o body.o display.o
+main.o: body.o display.o
 	$(CC) -c $(FLAGS) main.c
-
-universe.o:
-	$(CC) -c $(FLAGS) universe.c
 
 body.o:
 	$(CC) -c $(FLAGS) body.c
