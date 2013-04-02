@@ -2,57 +2,51 @@
 #define BODY_TW
 #include "nbody.h"
 
-/*
- * Create a random body
- */
+// create a body populated with random values
 struct body* make_rand_body()
 {
     struct body *mybody = (struct body*) malloc(sizeof(struct body));
-    mybody->mass = 1;
-    mybody->posX = rand() % 800 + 1;
-    mybody->posY = rand() % 800 + 1;
+    mybody->colour = (struct colour*) malloc(sizeof(struct colour));
+
+    //mybody->mass = (double) (rand() % MAX_BODY_MASS) +
+        //((rand() % 100) / 100.0); // 100 for 2 decimal places
+    mybody->mass = .05; // should rand between .05 .9 ?1?
+    mybody->posX = rand() % SCREEN_RES_X + 1;
+    mybody->posY = rand() % SCREEN_RES_X + 1;
+    mybody->colour->red = rand() % 255;
+    mybody->colour->green = rand() % 255;
+    mybody->colour->blue = rand() % 255;
 
     return mybody;
 }
 
-// todo function for new body
-
+// calculate the distance in pixcels between two bodies
 double body_compute_distance(struct body *body1, struct body *body2) 
 {
-    double sq =  sqrt(
+    return sqrt(
             pow(body2->posX - body1->posX, 2.0) +
             pow(body2->posY - body1->posY, 2.0)
             );
-
-    //printf("sq: %f\n", sq);
-    return sq;
-    // todo subtract radius of each body??
 }
 
+// calculate the current velocity given time 
 void body_compute_velocity(struct body *nbody, int time) 
 {
-    // new v = v + (force * time) / mass
-
-    double velocityX = nbody->velocityX +
+    nbody->velocityX = nbody->velocityX +
         ((time * nbody->forceX) / nbody->mass);
-    double velocityY = nbody->velocityY +
+    nbody->velocityY = nbody->velocityY +
         ((time * nbody->forceY) / nbody->mass);
-
-    nbody->velocityX = velocityX;
-    nbody->velocityY = velocityY;
-
-    //printf("%s: VX: %f VY: %f\n", body1->name, body1->velocityX, body1->velocityY);
 }
 
+// calculate the bodys position given a velocity
 void body_compute_position(struct body *mybody) {
     double newposX = mybody->velocityX * TIME_MAX;
     double newposY = mybody->velocityY * TIME_MAX;
     mybody->posX = mybody->posX + newposX;
     mybody->posY = mybody->posY + newposY;
-
-    //printf("%s: %f %f\n", mybody->name, newposX, newposY);
 }
 
+// make an update on all bodies in the universe
 void update_bodies(int time, struct body *bodies[], int num_bodies)
 {
     for(int n = 0; n < num_bodies; n++) {
@@ -77,9 +71,9 @@ void update_bodies(int time, struct body *bodies[], int num_bodies)
     puts("\n");
 }
 
+// add the caculated force on a body from another body
 void body_compute_force(struct body *bodya, struct body *bodyb)
 {
-    // (G * (m1 * m2)) * xb - ya
     double totalmass = GRAVITATIONAL_CONST * (bodya->mass * bodyb->mass);
     double radius = body_compute_distance(bodya, bodyb);
     double theforce =  totalmass / (radius * radius);
@@ -90,10 +84,10 @@ void body_compute_force(struct body *bodya, struct body *bodyb)
     //printf("%s: %f %f\n", bodya->name, bodya->forceX, bodya->forceY);
 }
 
+// print the values of a body
 void body_print(struct body *mybody) 
 {
-    printf("%s M: %f PX: %f PY: %f VX: %f VY: %f\n",
-            mybody->name,
+    printf("M: %f PX: %f PY: %f VX: %f VY: %f\n",
             mybody->mass,
             mybody->posX,
             mybody->posY,
