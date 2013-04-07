@@ -3,10 +3,13 @@
 # Tama Waddell <tama.waddell@griffithuni.edu.au>
 
 PROJECT	= nbody
-CC		= gcc
-FLAGS	= -std=c99 -Wall -Iinclude -Iinclude/SDL -D_GNU_SOURCE=1 -D_REENTRANT
-LDFLAGS	= -Llib -L./lib/SDL -Wl,-rpath,/tmp/gcc/lib -lSDL -lpthread -lm -ldl -lpthread
-DEPS	= -lgmp -lSDL
+CC		= mpicc
+FLAGS	= -std=c99 -Wall -Iinclude -Iinclude/SDL -I/usr/include/openmpi-x86_64 -D_GNU_SOURCE=1 -D_REENTRANT -pthread -m64
+LDFLAGS	= -Llib -L./lib/SDL -L/usr/lib64/openmpi/lib -Wl,-rpath,/tmp/gcc/lib 
+DEPS	= -lgmp -lSDL -lmpi -ldl -lpthread 
+
+#gcc -I/usr/include/openmpi-x86_64 
+#-pthread -m64 -L/usr/lib64/openmpi/lib -lmpi -ldl
 
 all: build
 

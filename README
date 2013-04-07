@@ -1,0 +1,66 @@
+Compile with make
+
+$ make
+
+All dependancies are included under libs with the exception of MPI.
+
+To run without a display and without MPI the first edit the header file and
+set DISPLAY_ON to false and MPI_ON to false. Compile with 
+
+$ make clean; make
+
+then run with 
+
+$./bin/nbody
+
+You can adjust the number of bodies and the amount of time in the header 
+file also.
+
+To run with MPI set MPI_ON to true and make clean then make and run job.sh
+
+
+My results weren't as successful as the computer was in use at the time.
+
+Benchmark results:
+
+8 bodies, 1 process 100 ticks --
+real    0m0.131s
+user    0m0.009s
+sys     0m0.010s
+
+8 bodies, 8 processes, 100 ticks --
+real    0m1.191s
+user    0m0.140s
+sys     0m0.133s
+
+800 bodies, 1 process, 100 ticks --
+real    0m4.558s
+user    0m4.431s
+sys     0m0.009s
+
+800 bodies, 4 processes, 100 ticks --
+real    0m6.991s
+user    0m14.813s
+sys     0m0.669s
+
+800 bodies, 16 processes, 100 ticks --
+real    0m7.385s
+user    0m14.286s
+sys     0m8.320s
+
+800 bodies, 1 process, 1000 ticks --
+real    0m44.676s
+user    0m44.476s
+sys     0m0.024s
+
+800 bodies, 16 process, 1000 ticks --
+real    0m59.973s
+user    2m22.241s
+sys     1m16.705s
+
+
+Someone else is using the cluster at this time. Sunday afternoon.
+The cluster goes faster however only at times. Seeing as the host computer 
+doesn't actually do any processing for the cluster, it appears to get better
+results.
+
