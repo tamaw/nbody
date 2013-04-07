@@ -1,27 +1,39 @@
-Compile with make
-
-$ make
 
 All dependancies are included under libs with the exception of MPI.
 
-To run without a display and without MPI the first edit the header file and
-set DISPLAY_ON to false and MPI_ON to false. Compile with 
+The output of the eight body run is located in the file eightoutput.txt.
+That includes 8 bodies on one processor with 100 ticks
+
+Pictures are in the screenshots/ folder with varius confiurations.
+
+To run without a display and without MPI the first edit the header file
+nbody.h and set DISPLAY_ON to false and MPI_ON to false. Compile with :
 
 $ make clean; make
 
-then run with 
+then run with :
 
 $./bin/nbody
 
 You can adjust the number of bodies and the amount of time in the header 
 file also.
 
-To run with MPI set MPI_ON to true and make clean then make and run job.sh
+To run with MPI set MPI_ON in nbody.h to true then:
+
+$ make clean; make;
+
+and run
+
+$job.sh 
+
+or 
+
+$ mpiexec -n 16 -hostfile hostfile ./bin/nbody
 
 
-My results weren't as successful as the computer was in use at the time.
+----------------====== Benchmark results: ======-----------------
 
-Benchmark results:
+My results weren't as successful as the cluster was in use at the time.
 
 8 bodies, 1 process 100 ticks --
 real    0m0.131s
@@ -59,8 +71,9 @@ user    2m22.241s
 sys     1m16.705s
 
 
-Someone else is using the cluster at this time. Sunday afternoon.
+Someone else is using the cluster at this time. Sunday afternoon / night.
 The cluster goes faster however only at times. Seeing as the host computer 
 doesn't actually do any processing for the cluster, it appears to get better
-results.
+results. I can only conclude from my results that the parallel computing on negitivily reflects my results. 
+
 
